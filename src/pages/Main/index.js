@@ -1,15 +1,23 @@
-import * as React from 'react';
-import {View, Text, Button} from 'react-native';
+import React from 'react';
+import {} from 'styled-components';
 
-export default function Main({navigation}) {
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {Container, Form, Input, SubmitButton} from './styles';
+
+export default function Main() {
     return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Text>Home Screen</Text>
+        <Container>
+            <Form>
+                <Input
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    placeholder="Adicionar usuário"
+                />
 
-            <Button
-                title="Ir para detalhes"
-                onPress={() => navigation.navigate('User')}
-            />
-        </View>
+                <SubmitButton>
+                    <Icon name="add" size={20} color="#fff" />
+                </SubmitButton>
+            </Form>
+        </Container>
     );
 }
