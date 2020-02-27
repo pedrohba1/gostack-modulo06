@@ -8,6 +8,9 @@
 ## About <a name = "about"></a>
 
 Este é um projeto de estudo de react Native do curso Gostack. Imagens representativas abaixo:
+![img](https://github.com/pedrohba1/gostack-modulo06/blob/master/raedme_stuff/image1.jpeg)
+![img](https://github.com/pedrohba1/gostack-modulo06/blob/master/raedme_stuff/image2.jpeg)
+
 
 ## Getting Started <a name = "getting_started"></a>
 
