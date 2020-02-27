@@ -5,9 +5,18 @@ export const Container = styled.View`
     padding: 30px;
 `;
 
-export const Header = styled.View``;
+export const Header = styled.View`
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom-width: 1px;
+    border-color: #eee;
+`;
 
-export const Avatar = styled.Image``;
+export const Avatar = styled.Image`
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+`;
 
 export const Name = styled.Text``;
 
