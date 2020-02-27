@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import {ActivityIndicator} from 'react-native';
 import {WebView} from 'react-native-webview';
 
-
 import api from '../../services/api';
 import {
     Container,
@@ -52,6 +51,11 @@ export default class User extends Component {
         this.setState({refreshing: true});
     };
 
+    handleNavigate = repo => {
+        const {navigation} = this.props;
+        navigation.navigate('Repository', {repo});
+    };
+
     async loadMore() {
         this.setState({refreshing: true});
         const {stars, page} = this.state;
@@ -95,7 +99,8 @@ export default class User extends Component {
                         keyExtractor={star => String(star.id)}
                         renderItem={({item}) => (
                             <>
-                                <Starred>
+                                <Starred
+                                    onPress={() => this.handleNavigate(item)}>
                                     <OwnerAvatar
                                         source={{
                                             uri: item.owner.avatar_url,
