@@ -34,17 +34,13 @@ export default class User extends Component {
 
     state = {
         stars: [],
-        loading: false,
+        loading: true,
         page: 1,
         refreshing: false,
     };
 
     async componentDidMount() {
-        this.setState({loading: true});
-        const {route} = this.props;
-        const {user} = route.params;
-        const response = await api.get(`/users/${user.login}/starred`);
-        this.setState({stars: response.data, loading: false});
+        this.load();
     }
 
     refreshList = () => {
@@ -56,28 +52,43 @@ export default class User extends Component {
         navigation.navigate('Repository', {repo});
     };
 
-    async loadMore() {
-        this.setState({refreshing: true});
-        const {stars, page} = this.state;
+    load = async (page = 1) => {
+        const {stars} = this.state;
         const {route} = this.props;
         const {user} = route.params;
 
         const response = await api.get(`/users/${user.login}/starred`, {
-            params: {page: page + 1},
+            params: {page},
         });
 
         this.setState({
             stars: page >= 2 ? [...stars, ...response.data] : response.data,
-            page: page + 1,
+            page,
             loading: false,
             refreshing: false,
+            loadingStars: false,
         });
-    }
+    };
+
+    refreshList = () => {
+        this.setState({refreshing: true, stars: []}, this.load);
+    };
+
+    loadMore = async () => {
+        this.setState({loadingStars: true});
+
+        const {page} = this.state;
+
+        const nextPage = page + 1;
+
+        await this.load(nextPage);
+        this.setState({loadingStars: false});
+    };
 
     render() {
         const {route} = this.props;
         const {user} = route.params;
-        const {stars, loading, refreshing} = this.state;
+        const {stars, loading, refreshing, loadingStars} = this.state;
 
         return (
             <Container>
@@ -92,28 +103,28 @@ export default class User extends Component {
                 ) : (
                     <Stars
                         onEndReachedThreshold={0.2} // Carrega mais itens quando chegar em 20% do fim
-                        onEndReached={() => this.loadMore()} // Função que carrega mais itens
+                        onEndReached={this.loadMore} // Função que carrega mais itens
                         onRefresh={this.refreshList}
                         refreshing={refreshing}
                         data={stars}
                         keyExtractor={star => String(star.id)}
                         renderItem={({item}) => (
-                            <>
-                                <Starred
-                                    onPress={() => this.handleNavigate(item)}>
-                                    <OwnerAvatar
-                                        source={{
-                                            uri: item.owner.avatar_url,
-                                        }}
-                                    />
-                                    <Info>
-                                        <Title>{item.name}</Title>
-                                        <Author>{item.owner.login}</Author>
-                                    </Info>
-                                </Starred>
-                            </>
+                            <Starred onPress={() => this.handleNavigate(item)}>
+                                <OwnerAvatar
+                                    source={{
+                                        uri: item.owner.avatar_url,
+                                    }}
+                                />
+                                <Info>
+                                    <Title>{item.name}</Title>
+                                    <Author>{item.owner.login}</Author>
+                                </Info>
+                            </Starred>
                         )}
                     />
+                )}
+                {loadingStars && (
+                    <ActivityIndicator color="#7159c1" size={20} />
                 )}
             </Container>
         );
