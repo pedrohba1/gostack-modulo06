@@ -28,7 +28,7 @@ function Routes() {
                 <Stack.Screen
                     name="Main"
                     component={Main}
-                    options={{title: 'My home'}}
+                    options={{title: 'Usuários'}}
                 />
                 <Stack.Screen
                     name="User"
